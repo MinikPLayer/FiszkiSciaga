@@ -32,6 +32,13 @@ namespace MN_Sciaga
             this.InitializeComponent();
         }
 
+        public void LoadMNClicked(object sender, RoutedEventArgs e)
+        {
+            var lines = QuestionsMocks.QM_MN2022.data.Replace("\r", "").Split('\n');
+
+            Frame.Navigate(typeof(ViewerPage), lines);
+        }
+
         public async void LoadButtonClicked(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker();

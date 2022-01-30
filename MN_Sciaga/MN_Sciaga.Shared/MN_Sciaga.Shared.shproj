@@ -11,6 +11,8 @@
   <Import Project="MN_Sciaga.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
   <ItemGroup>
+    <_Globbed_Compile Remove="QuestionsData\QMock_MN2022.cs" />
+    <_Globbed_Compile Remove="QuestionsMocks\QM_MN2022.cs" />
     <_Globbed_Compile Remove="Util\ObservableObject.cs" />
     <_Globbed_Compile Remove="ViewerPage.xaml.cs" />
   </ItemGroup>

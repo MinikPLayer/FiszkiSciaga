@@ -129,24 +129,41 @@ namespace MN_Sciaga
             var uiSettings = new Windows.UI.ViewManagement.UISettings();
             separatorColor.val = new SolidColorBrush(uiSettings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Accent));
 
+#if !__WASM__
             Window.Current.CoreWindow.KeyDown += PageKeyDown_Event;
+#endif
         }
 
+#if !__WASM__
         ~ViewerPage()
         {
             Window.Current.CoreWindow.KeyDown -= PageKeyDown_Event;
         }
+#endif
 
         void NextPage(object sender, RoutedEventArgs e) => SelectElement(curPageID + 1);
         void PrevPage(object sender, RoutedEventArgs e) => SelectElement(curPageID - 1);
 
+        void KeyPressed(Windows.System.VirtualKey key)
+        {
+            if (key == Windows.System.VirtualKey.Right)
+                NextPage(null, null);
+            else if (key == Windows.System.VirtualKey.Left)
+                PrevPage(null, null);
+        }
+
+        void ElementPageDown_Event(object sender, KeyRoutedEventArgs e)
+        {
+#if __WASM__
+            KeyPressed(e.Key);
+
+            e.Handled = true;
+#endif
+        }
+
         void PageKeyDown_Event(object sender, Windows.UI.Core.KeyEventArgs e)
         {
-            if (e.VirtualKey == Windows.System.VirtualKey.Right)
-                NextPage(null, null);
-            else if (e.VirtualKey == Windows.System.VirtualKey.Left)
-                PrevPage(null, null);
-            
+            KeyPressed(e.VirtualKey);
 
             e.Handled = true;
         }
@@ -171,6 +188,10 @@ namespace MN_Sciaga
             //pageNumberText.Text = (id + 1).ToString() + " / " + questions.Count.ToString();
             pageNumberBox.Text = (id + 1).ToString();
             pagesCountText.Text = questions.Count.ToString();
+
+#if __WASM__
+            Focus(FocusState.Pointer);
+#endif
 
             return true;
         }

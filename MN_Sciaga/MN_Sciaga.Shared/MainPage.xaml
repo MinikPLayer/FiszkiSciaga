@@ -9,6 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel>
-        <Button Content="Load" Click="LoadButtonClicked" FontSize="32" Margin="10"/>
+        <Button Content="MN 2022" Click="LoadMNClicked" FontSize="32" Margin="10"/>
+        <Button Content="Load Custom" Click="LoadButtonClicked" FontSize="32" Margin="10"/>
     </StackPanel>
 </Page>

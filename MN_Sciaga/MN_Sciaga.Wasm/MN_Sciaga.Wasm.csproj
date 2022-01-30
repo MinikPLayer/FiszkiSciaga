@@ -6,7 +6,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <MonoRuntimeDebuggerEnabled>true</MonoRuntimeDebuggerEnabled>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;__WASM__</DefineConstants>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <!--
@@ -14,6 +14,9 @@
 		When building in Release, see https://platform.uno/docs/articles/features/using-il-linker-webassembly.html
 		-->
     <WasmShellILLinkerEnabled>false</WasmShellILLinkerEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;__WASM__</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Assets\SplashScreen.png" />
