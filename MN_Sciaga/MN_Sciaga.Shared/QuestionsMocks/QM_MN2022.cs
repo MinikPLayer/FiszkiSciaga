@@ -19,7 +19,7 @@ namespace MN_Sciaga.QuestionsMocks
 - Odejmowanie A-B = A + inv(B)
 - inv(B) = ~B + 1 [negacja bitów i dodanie 1]
 • format stałoprzecinkowy i zmiennoprzecinkowy (działania, różnice, formaty pojedynczej i podwojnej precyzji)
-+ Format stałoprzecinkowy
+   + Format stałoprzecinkowy
 - Działa jak zwyczajna liczba binarna, w tym z U2
 - Stała dokładność
 - Prostota i niskie wymagania sprzętowe
@@ -52,6 +52,7 @@ namespace MN_Sciaga.QuestionsMocks
    + Cyfry znaczące
 - k-ta cyfra dziesiętną liczby y’ to liczba znacząca, gdy |y-y’| <= ½ * 10^(-k) i |y’| >= 10^(-k)
 • liczby maszynowe i epsilon maszynowy, błąd reprezentacji
+   + Liczba maszynowa
 - Liczba maszynowa, to liczbą którą możemy przedstawić w komputerze
 - Zbiór liczb maszynowych to A
 - Dokładność maszynowa (epsilon maszynowy) to min. Liczba, którą można dodać do 1, aby otrzymać liczbę większą od 1, zależy on od liczby bitów
@@ -96,14 +97,17 @@ Sumą i=0->n z **x[i] / f(x) * df(x) / dx[i] * e[x[i]] **
 - Błąd względny pogarsza się proporcjonalnie do stałej uwarunkowania – O(K*e[m])
 - Jeśli f’(x) = f(x’), dla takich x’ że || x – x’ || / || x || = O(e[m])
 • Interpolacja, interpolacja wielomianowa i jej jednoznaczność
-- Twierdzenie Weierstrass’a: Każdą funkcję ciągłą można przybliżyć jednostajnie z dowolną dokładnością wielomianami
-- Aproksymacja funkcji: Znalezienie funkcji f’, która przybliża funkcję f
+   + Twierdzenie Weierstrass’a: 
+- Każdą funkcję ciągłą można przybliżyć jednostajnie z dowolną dokładnością wielomianami
+   + Aproksymacja funkcji:
+ - Znalezienie funkcji f’, która przybliża funkcję f
    + Interpolacja
 - Znalezienie dla zestawu węzłów (x[i], y[i]) funkcji f(x[i]) = y[i]
 - Interpolacja wielomianowa: znalezienie współczynników wielomianu p stopnia n, gdy mamy n+1 węzłów
    + Jednoznaczność interpolacji:
 - Istnieje tylko jeden „najlepszy” w interpolacji wielomian stopnia n
 • Wzór Lagrange’a (zasada działania)
+   + Wzór Lagrange’a
 - Klasyczny wzór na określenie wielomianu interpolacyjnego
 - Najbardziej uniwersalny
 - Najprostszy pojęciowo
@@ -111,6 +115,7 @@ Sumą i=0->n z **x[i] / f(x) * df(x) / dx[i] * e[x[i]] **
 - Każdy z wielomianów odpowiada za interpolację w 1 punkcie, a w pozostałych ma wartość 0
 - Wysoka złożoność obliczeniowa wyliczenia wielomianu w punkcie x – O(n^2)
 • Wzór barycentryczny (obie formy, zasada działania)
+   + Wzór barycentryczny
 - Modyfikacja interpolacji Lagrange’a
 - Wielomian stopnia n+1, który zeruje się we wszystkich węzłach
 - l(x) = ( x – x[0] )( x – x[1] ) ... ( x – x[n] )
@@ -124,6 +129,7 @@ L(x) = suma [ j = 0 -> n ] z ( y[j] * w[j] / (x – x[j]) ) / suma [ j = 0 -> n 
 - Węzły interpolacji dla [-1,1]:  x[i] = -1 + 2i/n
 - Wagi barycentryczne: w[j] = (-1)^(n-j) / (h^n * n!) * (n po j)
 • Efekt Rungego,
+   + Efekt Rungego
 - Efekt przy węzłach równoodległych
 - Pogorszenie się interpolacji wielomianowej na krańcach przedziału pomimo zwiększenia ilości węzłów
 - Interpolacja zachowuje się dobrze, jeśli węzły zagęszczają się przy brzegach przedziału – np. węzły Legendre’a
@@ -145,6 +151,7 @@ L(x) = suma [ j = 0 -> n ] z ( y[j] * w[j] / (x – x[j]) ) / suma [ j = 0 -> n 
 F(x) = 1 -> wielomiany Legendre’a
 F(x) = 1 / sqrt(1-x^2) -> wielomiany Czebyszewa
 • Wyliczanie szeregu Czebyszewa z wielomianu interpolacyjnego oraz dobór stopnia interpolacji
+   + Wyliczanie szeregu Czebyszewa
 - Każdy wielomian stopnia n można przedstawić jako sumę wielomianów Czebyszewa stopni 0 do n
 - f(x) ~= suma [ i = 0 -> n ] z ( a[i] * T[i](x) ), gdzie T[i](x) to funkcje bazy
 - Wyliczanie współczynników jest kłopotliwe
@@ -156,12 +163,14 @@ F(x) = 1 / sqrt(1-x^2) -> wielomiany Czebyszewa
 a. Jeśli nie, to N = 2N i powrót do 1)
 b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n’
 • Najlepsza aproksymacja wielomianowa
+   + Najlepsza aproksymacja wielomianowa
 - **Ekwioscylacja** - funckja f(x) wraz ze wzrostem argumentu oscyluje między wartościami +- || f(x) ||
 1) Szukamy wielomianu, dla którego błąd E będzie ekwioscylował
 2) Wyznaczamy wsp. Wielomianu i wartości E w przyjętym zestawie punktów, E niekoniecznie jest max. Błędu
 3) Znajdujemy miejsca zerowe krzywej błędu, wyznaczamy maksima i minima pomiędzy miejscami zerowymi jako nowe punkty
 4) Przestajemy, gdy wartości minimów i maksimów są sobie bliskie co do modułu
 • Stała Lebesgue’a i jakość aproksymacji
+   + Stała Lebesgue’a
 - Określa jak duży może być wielomian interpolacyjny między punktami
 - Jak aproksymacja zwiększa normę aproksymowanej funkcji
 - Dla każdej aproksymacji wartości stałej dąży do nieskończonośći wraz ze wzrostem n 
@@ -171,12 +180,14 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 	-- Aproksymacja Czebyszewa: L[n] = O( 4/Pi^2 * log(n) )
 	-- Ze względu na logarytmiczną naturę, dokładność nie rośnie zbyt długo
 • Aproksymacja Caratheodory’ego–Fejer’a
+   + Aproksymacja Caratheodory’ego–Fejer’a
 - Jeśli mamy wielomian interpolacyjny wysokiego rzędu N dla f i chcemy znaleźć dobrą aproksymację rzędu n
 - Za pomocą operacji macierzowych na współczynnikach szerego Czebyszewa i obcięcia szeregu Laurenta dostajemy bardzo dobre przybliżenie krzywej ekwioscylacji
 - Taka aproksymacja różni się znacznie mniej od aproksymacji najlepszej niż wynosi jej błąd 
 - O( (N-n)^3 )
 - Nie wymaga iteracji jak algorytm Remeza
 • Geometryczna interpretacja układu równań
+   + Geometryczna interpretacja układu równań
 - Narysowanie prostych tworzących układ równań i znalezienie ich przecięcia
 - Mnożenie Ax to kombinacja liniowa kolumn macierzy A o współczynnikach wektora x
 - Rozwiązując układ równań poszukujemy współczynników, które pozwolą nam zrekonstruować wektor b za pomocą kolumn macierzy A
@@ -193,6 +204,7 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 - Indukowana (norma wskazująca, jak silnie macierz wpływa na wektor, np. Euklidesowa)
 - Elementowa [ogólna] (norma definiowana w oparciu o parametry macierzy, np. Frobeniusa)
 • Rozkład na wartości singularne
+   + Rozkład na wartości singularne
 - Rozkład zachodzi dla każdej macierzy
 - Rząd macierzy to liczba niezerowych wartości singularnych
 - Wyznacznik macierzy kwadratowej to iloczyn wartości singularnych
@@ -205,6 +217,7 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 	-- Rozkład niewrażliwy na błędy w przypadku macierzy prawie osobliwych
 	-- Wartości singularne to nieujemne uporządkowane liczby rzeczywiste z macierzy E
 • Rozkład LU (z przestawieniami i bez), uwarunkowanie
+   + Rozkład LU
 - Najpopularniejszy sposób przedstawiania układów równań liniowych
 - A = LU, 	gdzie:
 	-- L jest trójkątna dolna (z 1 na przekątnych)
@@ -217,12 +230,14 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 	-- Jeśli zamiast 0 są bardzo małe liczby to występuje duży potencjał na błędy numeryczne
 - O( 2/3 * m^3 )
 • Rozkłąd Choleskiego
+   + Rozkład Choleskiego
 - Każda macierz dodatnio określona ma jednoznacznie określony rozkład Choleskiego
 - Specyficzny rozkład LU, w którym L = U^T
 - O( 1/3 * m^3 ), czyli 2x szybciej niż Gauss
 - Stabilny wstecznie
 - Wszystkie problemy stabilności występujące przy LU go nie dotyczą, ze względu na dodatnio-określoność
 • Rozkład QR
+   + Rozkład QR
 - Każda macierz ma rozkład QR
 - Rozkład macierzy A na iloczyn A = Q*R, gdzie:
 	-- Q jest ortogonalna ( Q*Q*T = I ),
@@ -234,6 +249,7 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 - Jeśli m = n, to O ( 4/3 * m^3 ), czyli 2x wolniejszy od LU
 - Nie ma wymagań do specyficznych macierzy jak LU
 • Ortogonalizacja Grama-Schmidta (ogólna zasada)
+   + Ortogonalizacja Grama-Schmidta
 - Możliwe jest przekształcenie metody z wykorzystaniem koncepcji rzutów ortogonalnych
 - Bardziej stabilne numerycznie od rzutów na kolumny jest dokonywanie rzutów na komplementarne podprzestrzenie
 - Wzory analityczne są równoważne, ale bardziej stabilne numerycznie
@@ -241,9 +257,11 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 - O( 2 * m * n^2 )
 - Można traktować jako sekwencję operacji mnożenia przez macierze trójkątne tak, aby uzyskać macierz z ortogonalnymi kolumnami
 • Triangularyzacja Hausholdera (ogólna zasada)
+   + Triangularyzacja Hausholdera
 - Sekwencja mnożenia przez macierze unitarne w celu uzyskania macierzy trójkątnej
 - O( 2*m*n^2 – 2/3 * n^3 )
 • Problem najmniejszych kwadratów (metody rozwiązywania)
+   + Problem najmniejszych kwadratów
 - Układ równań z macierzą prostokątną jest zazwyczaj sprzeczny
 - Można go rozwiązać przez minimalizację normy residuum
 - Tzw **problem najmniejszych kwadratów**, bo minimalizuje sumę kwadratów
@@ -263,6 +281,7 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 - Rozkład QR:	A = Q*R  ->  Rx = Q * b
 - SVD
 • Macierze rzadkie
+   + Macierze rzadkie
 - Sparse matrix
 - Macierze, w których większość elementów ma wartość zero
 - Sposoby zapisu macierzy rzadkich:
@@ -272,6 +291,7 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 	-- Format Yale (Compressed Sparse Row): 	3 macierze jednowymiarowe
 - Wykorzystuje się także np. symetrię macierzy (wystarczy połowa danych), lub struktury jak macierze Hassenberga czy Pasmowe
 • Klasyczne algorytmy iteracyjne
+   + Klasyczne algorytmy iteracyjne
 - Metody wywodzące się z lat 50-tych, ale wciąż często używane
 - Wynik dzięki iteracji
 - Stosowane obecnie jako **preconditionery**, czyli zrobienie iteracji metodą klasyczną celem ulepszenia bardziej zaawansowanych metod
@@ -313,6 +333,7 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 - Rozwiązanie jako konstrukcja wektorów postaci b, A*b, A^2*b, A^3*b, ...
 - Podprzestrzeń skonstruowana z takich wektorów to **przestrzeń Kryłowa**
 • Metoda gradientu sprzężonego (zasada działania), zastosowania
+   + Metoda gradientu sprzężonego
 - Służy do rozwiązywania układów równań liniowych, w których macierz jest dodatnio określona i symetryczna
 - Jest metodą iteracyjną
 - Może być zastosowana do rozwiązywania układów o macierzach rzadkich, z którymi nie radzą sobie algorytmy bezpośrednie jak rozkład Choleskiego
@@ -368,9 +389,11 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 	-- Wyprowadzamy styczną z f(x[1]), miejsce przecięcia z OX jest pierwszym przybliżeniem rozwiązania (x[2])
 	-- Jeśli przybliżenie nie jest satysfakcjonujące, to obieramy x[2] jako punkt startowy i powtarzamy czynności
 • Twierdzenie Abela
+   + Twierdzenie Abela
 - Dla każdego m >= 5 istnieje wielomian p(x) stopnia m o wymiernych współczynnikach, taki że pierwiastek rzeczywisty p(r) = 0, taki że nie może on zostać zapisany w formie wyrażenia zawierającego liczby wymierne, dodawanie, odejmowanie, mnożenie, dzielenie i pierwiastki różnych stopni
 - Konsekwencja jest taka, że pierwiastki wielomianu można wyliczyć TYLKO iteracyjnie
 • Wartości własne i ich związek z pierwiastkami, macierz Frobeniusa
+   + Wartości własne
 - Niech A będzie zespoloną macierzą kwadratową, niezerowy wektor zespolony w jest wektorem własnym A, a l należące do C jest odpowiadającą mu wartością własną, jeśli A*w = l*w
 - Poszukiwanie pierwiastków wielomianu jest równoważne z poszukiwaniem wartości własnych macierzy
 - Wielomian charakterystyczny macierzy A o wymiarach m*m to wielomian stopnia m o postaci:	p(x) – det(z*I – A)
@@ -385,6 +408,7 @@ b. Jeśli tak, to znajdujemy największe n’, takie że Cn’ > em’ i N = n�
 	P(z) = z^n + c[n-1] * z^(n-1) + ... + c[1] * z + c[0]
 - Poszukiwanie pierwiastków wielomianu jest równoważne poszukiwaniu wartości własnych macierzy
 • Dekompozycje macierzy i postać Schura
+   + Dekompozycje macierzy
 - Każdą macierz, która ma **rózne wartości własne**, można przedstawić w postaci:
 	A = X * D * X^-1,	gdzie
 	-- X: macierz wektorów własnych
@@ -438,6 +462,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 - Iteracja ilorazu Rayleigha polega na naprzemiennym stosowaniu obydwu algorytmów
 - Jeden z najszybciej zbieżnych algorytmów numerycznych (zbieżny w sposób sześcienny)
 • Algorytm QR wyznacznia wartości własnych (Zasada działania i rząd zbieżności)
+   + Algorytm QR
 - Algorytm Rayleigha, ale szukający w róznych kierunkach jednocześnie – najlepiej ortogonalnych
 - Stosuje się rozkład QR macierzy A:
 	A[0] = A
@@ -456,6 +481,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 	-- To samo co w klasycznym QR, ale przesuwamy wartości własne macierzy przed faktoryzacją i z powrotem do złożenia macierzy
 	-- Macierze Q zbiegają do macierzy wektorów własnych, zaś przekątna R do ilorazów Rayleigha. Dzięki temu jako element r[k] wybieramy element z przekątnej  
 • Algorytm divide and conquer
+   + Algorytm Divide And Conquer
 - Wyznaczanie wektorów i wartości własnych
 - 2x szybszy od QR
 - Ogólna zasada polega na podzieleniu problemu na 2 mniejsze problemy – każdy z nich rozwiązywany jest rekurencyjnie, a następnie wartości własne są znajdywane przy użyciu mniejszych problemów
@@ -500,6 +526,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 - Najmniejsza możliwa zmiana w aproksymacji przy spełnieniu warunku siecznej
 - Różnica między wartościami residuum ma być równa iloczynowi wektora różnicy argumentów * jakaś macierz
 • Funkcja celu i poszukiwanie kierunkowe
+   + Funkcja celu
 - Metody Newtonowskie i quasi-Newtonowskie są zbieżne jedynie lokalnie
 - Aby uniknąć tego problemu zaproponowano aby korygować długość między iteracjami:
 	X[k+1] = x[k] + e*p
@@ -512,11 +539,13 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 	-- Nie robimy długich kroków, chyba że to uzasadnione
 	-- Jeżeli funkcja po naszym kroku dalej silnie maleje, to trzeba zrobić dłuższy krok
 • Metody homotopii (ogólna idea)
+   + Metody homotopii
 - Stopniowe przechodzenie od problemu prostszego do trudniejszego:
 	H(x, l) = l*r(x) + ( 1 – l ) * ( x – a ), 	gdzie
 	-- l [0, 1]: zaczynamy od prostego problemu dla l = 0 i stopniowo zmierzamy do rozwiązania
 - W praktyce wyznaczmy wektor styczny do homotopi i w oparciu o niego konstruujemy równania różniczkowe albo algebraiczne, które trzymają nas dalej na ścieżce
 • Całkowanie w czasie rzeczywistym, Metody Eulera, trapezów
+   + Całkowanie w czasie rzeczywistym
 - Podstawowe zastosowanie w automatyce – regulacja Pl i PID
 - Kolejne wartości funkcji dostajemy w określonych odstępach czasu
 - Nie możemy wybierać punktów
@@ -537,6 +566,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 - Nie przenosi się łatwo na obliczenia nieliniowe
 - Większa złożoność obliczeniowa
 • Kwadratury interpolacyjne, Rząd wielomianowy kwadratury
+   + Kwadratury interpolacyjne
 - Kwadraturą nazywamy numeryczne wyliczenie całki
 - Przedstawienie wartości całki w przedziale za pomocą ważonej sumy jej wartości w n punktach
 - Interpolujemy funkcję wielomianem i liczymy jego całkę
@@ -555,6 +585,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 - Dla każdego n >= 0 kwadratura interpolacyjna na n+1 węzłach ma rząd wielomianowy n
 - Np. Gaussa-Legendre’a ma rząd 2n+1 (czyli jest 2x dokładniejsza)
 • Warianty kwadratury Gaussa
+   + Warianty kwadratury Gaussa
 - Gauusa-Legendre’a:
       -- Dla liniowej funkcji wagowej
 	-- Najdokładniejsza dla wielomianów
@@ -578,6 +609,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 			---- Pozostałe:	2 / n*(n-1)*(P[n-1]*x[i])^2
 	
 • Wyznaczanie wag i węzłów kwadratury Clenshawa-Curtisa
+   + Metoda Clenshawa-Curtisa
 - Najprostsza metoda
 - Szybka obliczeniowo
 - Może mieć problemy z dokładnością
@@ -586,18 +618,22 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 2) Za pomocą FFT zamiana wielomianu na szereg Czebyszewa
 3) Całki z poszczególnych wielomianów Czebyszewa są znane, więc obliczenie całki to suma iloczynów współczynników o odpowiadających im wartościach całek
 • Wyznaczanie wag i węzłów kwadratury Gaussa-Legendre’a
+   + Metoda Gaussa-Legendre’a
 - Tylko numerycznie
 - Algorytm Goluba-Welscha
 - Istnieje szybszy algorytm Hale’a-Towsenda
 	-- Wykorzystuje wzory asymptotyczne, a „krok Newtona” wykonuje się oddzielnie dla każdego węzła
 • Kwadratury adaptacyjne (zasada działania)
+   + Kwadratury adaptacyjne
 - Liczenie kwadratur w podprzedziałach
 - Jednoczesne liczenie kwadratur różnych rzędów, mających węzły na brzegach przedziału
 - Jeśli różnica między kwadraturami jest duża, to stosujemy każdą z kwadratur na podprzedziałach pomiędzy wyliczonymi już węzłami
 • Istnienie i jednoznaczność rozwiązania równania różniczkowego, warunek Lipschitza
+   + Warunek Lipschitza
 - Równanie różniczkowe ma rozwiązanie i jest ono jednoznaczne wtedy i tylko wtedy, gdy funkcja f spełnia warunek Lipschitza (ze względu na drugą zmienną):
 	-- | f(x,z) – f(x,y) | <= L * | z – y |
 • Metoda eulera w przód, dokładność, błąd, łamana Eulera
+   + Metoda Eulera w przód
 - Szukamy rozwiązania problemu na przedziale całkowania
 	-- y’ = f(x,y)
 	-- y(x[0]) = y[0]
@@ -617,6 +653,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 - Skracając długość kroku *h* łamana Eulera zmierza jednostajnie do ciągłej funkcji fi(x)
 - Jeśli funkcja oraz jej pochodne ze względu na x i y są ograniczone, to dla dostatecznie małych *h* globalny błąd metody Eulera jest proporcjonalny do długości maksymalnego kroku (czyli np. dla 3 miejsc po przecinku potrzeba 1000 kroków)
 • Idea metod Rungego-Kutty, przykład metody punktu środkowego
+   + Idea Rungego-Kutty
 - Usprawnienie metody Eulera
 - Metoda punktu środkowego – relatywnie prosta, mówi tylko, że wartość całki / równania różniczkowego zależeć będzie od wartości w połowie przedziału
 - W porównaniu do Eulera – niestety mamy wartości nie w konkretnym punkcie, ale przesuniętą o pół,
@@ -770,6 +807,7 @@ Jest zbieżny do wektora własnego odpowiadającego największej co do modułu w
 - Wykorzystanie wielu wartości rozwiązania, tylko do wyliczenia wartości pochodnych w tym punkcie
 - Zamiast całkowania wykorzystuje się wielomian interpolacyjny do estymacji pochodnej
 • Zachowanie stabilności rozwiązania równania różniczkowego, równanie sztywne, A-stabilność
+   + Zachowanie stabilności
 - Rozwiązania równań powinny się zachowywać tak jak równania (czyli jeśli układ jest stabilny, to rozwiązanie też powinno być)
 - **Stabilność w sensie Lapunowa** - „trochę mocniejsza ciągłość”, która mówi nam że mała zmiana warunku początkowego mało zmienia wyjście
 - Jeśli mamy rozwiązanie i chcemy sprawdzić jego stabilność, to jeśli wystartujemy blisko rozwiązania to pozostaniemy blisko

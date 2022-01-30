@@ -1,6 +1,7 @@
 ﻿using MN_Sciaga.Util;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -50,6 +51,7 @@ namespace MN_Sciaga
         public ObservableObject<Brush> separatorColor = new ObservableObject<Brush>();
 
         public List<QuestionEntryModel> questions = new List<QuestionEntryModel>();
+        public ObservableCollection<string> searchBarHints = new ObservableCollection<string>();
 
         const int fontSize = 32;
 
@@ -76,7 +78,10 @@ namespace MN_Sciaga
                 //block.Text = lines[i];
 
                 if (trimmed.StartsWith("+"))
+                {
                     block.FontWeight = Windows.UI.Text.FontWeights.ExtraBold;
+                    line = "\n" + line;
+                }
                 else if (trimmed.StartsWith("-"))
                     line = "\t" + line;
                 else
@@ -116,6 +121,7 @@ namespace MN_Sciaga
                     block.Inlines.Add(new Run() { Text = line.Substring(index) });
 
                 block.FontSize = fontSize;
+                block.TextWrapping = TextWrapping.WrapWholeWords;
 
 
                 model.content.Add(block);
@@ -132,6 +138,7 @@ namespace MN_Sciaga
 #if !__WASM__
             Window.Current.CoreWindow.KeyDown += PageKeyDown_Event;
 #endif
+
         }
 
 #if !__WASM__
@@ -141,8 +148,96 @@ namespace MN_Sciaga
         }
 #endif
 
+        void SearchBoxKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if(e.Key == Windows.System.VirtualKey.Enter)
+            {
+                if (searchBarHints.Count == 0)
+                    return;
+
+                if (hintsListBox.SelectedIndex == -1)
+                    hintsListBox.SelectedIndex = 0;
+
+                var item = (string)hintsListBox.SelectedItem;
+                SelectElement(item);
+                searchBar.Text = "";
+
+                searchBarVisible.val = Visibility.Collapsed;
+            }
+            else if(e.Key == Windows.System.VirtualKey.Up)
+            {
+                if (hintsListBox.SelectedIndex == -1)
+                    hintsListBox.SelectedIndex = 0;
+                else if (hintsListBox.SelectedIndex > 0)
+                    hintsListBox.SelectedIndex = hintsListBox.SelectedIndex - 1;
+            }
+            else if (e.Key == Windows.System.VirtualKey.Down)
+            {
+                if (hintsListBox.SelectedIndex == -1)
+                    hintsListBox.SelectedIndex = 0;
+                else if (hintsListBox.SelectedIndex < searchBarHints.Count - 1)
+                    hintsListBox.SelectedIndex = hintsListBox.SelectedIndex + 1;
+            }
+        }
+
+        void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if(box == null)
+            {
+                _ = new MessageDialog("Internal app error - 231457a", "Error").ShowAsync();
+                return;
+            }
+
+            searchBarHints.Clear();
+
+            string text = box.Text;
+            if (text == null || text.Length == 0)
+                return;
+
+            for(int i = 0;i<questions.Count;i++)
+            {
+                if (questions[i].header.ToLower().Contains(text.ToLower()))
+                    searchBarHints.Add(questions[i].header);
+            }
+        }
+
+        void HintsListBox_DT(object sender, TappedRoutedEventArgs e)
+        {
+            SelectElement((string)hintsListBox.SelectedItem);
+            searchBar.Text = "";
+            searchBarVisible.val = Visibility.Collapsed;
+        }
+
+
+        ObservableObject<Visibility> searchBarVisible = new ObservableObject<Visibility>(Visibility.Collapsed);
+        void SearchButtonClicked(object sender, RoutedEventArgs e)
+        {
+            searchBarVisible.val = searchBarVisible.val == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
         void NextPage(object sender, RoutedEventArgs e) => SelectElement(curPageID + 1);
         void PrevPage(object sender, RoutedEventArgs e) => SelectElement(curPageID - 1);
+
+
+        List<int> randomList = new List<int>();
+        int GetNewRandom()
+        {
+            if (questions.Count == 0)
+                return 0;
+
+            if(randomList.Count == 0)
+            {
+                for (int i = 0; i < questions.Count; i++)
+                    randomList.Add(i);
+            }
+
+            var random = new Random().Next(0, randomList.Count);
+            var value = randomList[random];
+            randomList.RemoveAt(random);
+
+            return value;
+        }
 
         void KeyPressed(Windows.System.VirtualKey key)
         {
@@ -150,15 +245,96 @@ namespace MN_Sciaga
                 NextPage(null, null);
             else if (key == Windows.System.VirtualKey.Left)
                 PrevPage(null, null);
+            // Random
+            else if(key == Windows.System.VirtualKey.R)
+            {
+                if(searchBarVisible.val == Visibility.Collapsed)
+                {
+                    var random = GetNewRandom();
+                    SelectElement(random, false);
+                }
+            }
+            else if(key == Windows.System.VirtualKey.S)
+            {
+                if (searchBarVisible.val == Visibility.Collapsed)
+                {
+                    SelectElement(curPageID, true);
+                }
+            }
+            /*else
+            {
+                if (key >= Windows.System.VirtualKey.A && key <= Windows.System.VirtualKey.Z ||
+                    key >= Windows.System.VirtualKey.Number0 && key <= Windows.System.VirtualKey.Number9)
+                {
+                    searchBar.Text += key.ToString().ToLower();
+                }
+                else if(key == Windows.System.VirtualKey.Space)
+                {
+                    searchBar.Text += " ";
+                }
+                else if (key == Windows.System.VirtualKey.Back)
+                {
+                    if (searchBar.Text.Length > 0)
+                        searchBar.Text = searchBar.Text.Remove(searchBar.Text.Length - 1);
+                }
+                else if(key == Windows.System.VirtualKey.Delete)
+                {
+                    var pos = searchBar.SelectionStart;
+                    if (pos < searchBar.Text.Length)
+                        searchBar.Text = searchBar.Text.Substring(0, pos) + searchBar.Text.Substring(pos + 1);
+
+                    searchBar.SelectionStart = pos;
+                    searchBar.SelectionLength = 0;
+                }
+                else if(key == Windows.System.VirtualKey.Enter)
+                {
+                    // Only when searching
+                    if(searchBarVisible.val == Visibility.Visible)
+                    {
+                        if (searchBarHints.Count == 0)
+                            return;
+
+                        if (hintsListBox.SelectedIndex == -1)
+                            hintsListBox.SelectedIndex = 0;
+
+                        var item = (string)hintsListBox.SelectedItem;
+                        SelectElement(item);
+                        searchBar.Text = "";
+                    }
+                }
+
+                searchBarVisible.val = searchBar.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }*/
+            else
+            {
+                if(key == Windows.System.VirtualKey.Control)
+                {
+                    if(searchBarVisible.val == Visibility.Collapsed)
+                    {
+                        searchBarVisible.val = Visibility.Visible;
+                        searchBar.Focus(FocusState.Keyboard);
+                    }
+                    else if(searchBar.Text.Length == 0)
+                    {
+                        searchBarVisible.val = Visibility.Collapsed;
+                    }
+
+                }
+            }
+        }
+
+        void PKA_Button(object sender, ProcessKeyboardAcceleratorEventArgs e)
+        {
+            KeyPressed(e.Key);
+
+            e.Handled = true;
         }
 
         void ElementPageDown_Event(object sender, KeyRoutedEventArgs e)
         {
-#if __WASM__
             KeyPressed(e.Key);
 
             e.Handled = true;
-#endif
         }
 
         void PageKeyDown_Event(object sender, Windows.UI.Core.KeyEventArgs e)
@@ -168,7 +344,20 @@ namespace MN_Sciaga
             e.Handled = true;
         }
 
-        bool SelectElement(int id)
+        bool SelectElement(string name)
+        {
+            for (int i = 0; i < questions.Count; i++)
+            {
+                if (questions[i].header == name)
+                {
+                    return SelectElement(i);
+                }
+            }
+
+            return false;
+        }
+
+        bool SelectElement(int id, bool revealContent = true)
         {
             if (id < 0)
                 return false;
@@ -180,18 +369,12 @@ namespace MN_Sciaga
             curPageID = id;
 
             questionContentSP.Children.Clear();
-            for(int i = 0;i<quest.content.Count;i++)
-            {
-                questionContentSP.Children.Add(quest.content[i]);
-            }
+            if(revealContent)
+                for(int i = 0;i<quest.content.Count;i++)
+                    questionContentSP.Children.Add(quest.content[i]);
 
-            //pageNumberText.Text = (id + 1).ToString() + " / " + questions.Count.ToString();
             pageNumberBox.Text = (id + 1).ToString();
             pagesCountText.Text = questions.Count.ToString();
-
-#if __WASM__
-            Focus(FocusState.Pointer);
-#endif
 
             return true;
         }
