@@ -36,7 +36,7 @@
         </Grid>
 
         <Rectangle Fill="{x:Bind separatorColor.val, Mode=OneWay}" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-        <ScrollViewer Grid.Row="2">
+        <ScrollViewer Grid.Row="2" x:Name="questionContentSV">
             <StackPanel x:Name="questionContentSP" Margin="10"/>
         </ScrollViewer>
         <Rectangle Fill="{x:Bind separatorColor.val, Mode=OneWay}" Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>

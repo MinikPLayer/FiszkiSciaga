@@ -9,6 +9,7 @@ using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -31,6 +32,28 @@ namespace MN_Sciaga
                 sb[0] -= (char)('a' - 'A');
 
             return sb.ToString();
+        }
+
+        public static bool IsDashedNumber(this string input)
+        {
+            if (input.Length < 2)
+                return false;
+
+            for(int i = 0;i<input.Length;i++)
+            {
+                if(input[i] == ')')
+                {
+                    if (i == 0)
+                        return false;
+
+                    return true;
+                }
+
+                if (input[i] < '0' || input[i] > '9')
+                    return false;
+            }
+
+            return false;
         }
     }
 
@@ -62,6 +85,7 @@ namespace MN_Sciaga
             {
                 var line = lines[i];
                 var trimmed = line.TrimStart('\t', ' ');
+                line = trimmed;
 
                 // Header
                 if(trimmed.StartsWith("*") || trimmed.StartsWith("•"))
@@ -77,15 +101,38 @@ namespace MN_Sciaga
                 TextBlock block = new TextBlock();
                 //block.Text = lines[i];
 
+                const int tabSize = 40;
                 if (trimmed.StartsWith("+"))
                 {
                     block.FontWeight = Windows.UI.Text.FontWeights.ExtraBold;
-                    line = "\n" + line;
+                    var pos = line.IndexOf('+');
+                    line = "\n" + line.Remove(pos, 1).Insert(pos, "•"); // replace + with • for better look
                 }
+                //else if (trimmed.StartsWith("-"))
+                //    //line = "\t" + line;
+                //    block.Margin = new Thickness(25, 0, 0, 0);
+                //else
+                //    //line = "\t\t" + line;
+                //    block.Margin = new Thickness(50, 0, 0, 0);
                 else if (trimmed.StartsWith("-"))
-                    line = "\t" + line;
+                {
+                    int count = 0;
+                    for (int j = 0; j < trimmed.Length; j++)
+                    {
+                        if (trimmed[j] == '-')
+                            count++;
+                        else
+                            break;
+                    }
+
+                    line = line.Substring(count - 1);
+
+                    block.Margin = new Thickness(tabSize * count, 0, 0, 0);
+                }
+                else if (trimmed.IsDashedNumber())
+                    block.Margin = new Thickness(tabSize * 2, 0, 0, 0);
                 else
-                    line = "\t\t" + line;
+                    block.Margin = new Thickness(tabSize * 3, 0, 0, 0);
 
                 int index = 0;
                 while(true)
@@ -216,8 +263,8 @@ namespace MN_Sciaga
             searchBarVisible.val = searchBarVisible.val == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        void NextPage(object sender, RoutedEventArgs e) => SelectElement(curPageID + 1);
-        void PrevPage(object sender, RoutedEventArgs e) => SelectElement(curPageID - 1);
+        void NextPage(object sender, RoutedEventArgs e) => SelectElement(curPageID + 1, showDefault);
+        void PrevPage(object sender, RoutedEventArgs e) => SelectElement(curPageID - 1, showDefault);
 
 
         List<int> randomList = new List<int>();
@@ -239,72 +286,71 @@ namespace MN_Sciaga
             return value;
         }
 
+        bool showDefault = true;
         void KeyPressed(Windows.System.VirtualKey key)
         {
+
+            const double scrollAmount = 80;
+
             if (key == Windows.System.VirtualKey.Right)
                 NextPage(null, null);
             else if (key == Windows.System.VirtualKey.Left)
                 PrevPage(null, null);
+            else if(key == Windows.System.VirtualKey.Up)
+            {
+                if (searchBarVisible.val == Visibility.Collapsed)
+                    questionContentSV.ChangeView(questionContentSV.HorizontalOffset, questionContentSV.VerticalOffset - scrollAmount, 1);
+            }
+            else if(key == Windows.System.VirtualKey.Down)
+            {
+                if (searchBarVisible.val == Visibility.Collapsed)
+                    questionContentSV.ChangeView(questionContentSV.HorizontalOffset, questionContentSV.VerticalOffset + scrollAmount, 1);
+            }
+            else if (key == Windows.System.VirtualKey.PageUp)
+            {
+                questionContentSV.ChangeView(questionContentSV.HorizontalOffset, questionContentSV.VerticalOffset - scrollAmount * 5, 1);
+            }
+            else if (key == Windows.System.VirtualKey.PageDown)
+            {
+                questionContentSV.ChangeView(questionContentSV.HorizontalOffset, questionContentSV.VerticalOffset + scrollAmount * 5, 1);
+            }
             // Random
             else if(key == Windows.System.VirtualKey.R)
             {
                 if(searchBarVisible.val == Visibility.Collapsed)
                 {
                     var random = GetNewRandom();
-                    SelectElement(random, false);
+                    SelectElement(random, showDefault);
                 }
             }
             else if(key == Windows.System.VirtualKey.S)
             {
                 if (searchBarVisible.val == Visibility.Collapsed)
                 {
+                    showDefault = true;
                     SelectElement(curPageID, true);
                 }
             }
-            /*else
+            else if (key == Windows.System.VirtualKey.H)
             {
-                if (key >= Windows.System.VirtualKey.A && key <= Windows.System.VirtualKey.Z ||
-                    key >= Windows.System.VirtualKey.Number0 && key <= Windows.System.VirtualKey.Number9)
+                if (searchBarVisible.val == Visibility.Collapsed)
                 {
-                    searchBar.Text += key.ToString().ToLower();
+                    showDefault = false;
+                    SelectElement(curPageID, false);
                 }
-                else if(key == Windows.System.VirtualKey.Space)
+            }
+            else if(key == Windows.System.VirtualKey.F12)
+            {
+                var view = ApplicationView.GetForCurrentView();
+                if (view.IsFullScreenMode)
                 {
-                    searchBar.Text += " ";
+                    view.ExitFullScreenMode();
                 }
-                else if (key == Windows.System.VirtualKey.Back)
+                else
                 {
-                    if (searchBar.Text.Length > 0)
-                        searchBar.Text = searchBar.Text.Remove(searchBar.Text.Length - 1);
+                    view.TryEnterFullScreenMode();
                 }
-                else if(key == Windows.System.VirtualKey.Delete)
-                {
-                    var pos = searchBar.SelectionStart;
-                    if (pos < searchBar.Text.Length)
-                        searchBar.Text = searchBar.Text.Substring(0, pos) + searchBar.Text.Substring(pos + 1);
-
-                    searchBar.SelectionStart = pos;
-                    searchBar.SelectionLength = 0;
-                }
-                else if(key == Windows.System.VirtualKey.Enter)
-                {
-                    // Only when searching
-                    if(searchBarVisible.val == Visibility.Visible)
-                    {
-                        if (searchBarHints.Count == 0)
-                            return;
-
-                        if (hintsListBox.SelectedIndex == -1)
-                            hintsListBox.SelectedIndex = 0;
-
-                        var item = (string)hintsListBox.SelectedItem;
-                        SelectElement(item);
-                        searchBar.Text = "";
-                    }
-                }
-
-                searchBarVisible.val = searchBar.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
-            }*/
+            }
             else
             {
                 if(key == Windows.System.VirtualKey.Control)
@@ -376,6 +422,8 @@ namespace MN_Sciaga
             pageNumberBox.Text = (id + 1).ToString();
             pagesCountText.Text = questions.Count.ToString();
 
+            questionContentSV.ChangeView(0, 0, 1, true);
+
             return true;
         }
 
@@ -391,7 +439,7 @@ namespace MN_Sciaga
                     return;
                 }
 
-                if(!SelectElement(index - 1))
+                if(!SelectElement(index - 1, showDefault))
                 {
                     await new MessageDialog("Error setting page number - wrong page number", "Error").ShowAsync();
                     return;

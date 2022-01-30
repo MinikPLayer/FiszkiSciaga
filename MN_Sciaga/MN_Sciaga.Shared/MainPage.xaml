@@ -8,8 +8,16 @@
     mc:Ignorable="d"    
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
-        <Button Content="MN 2022" Click="LoadMNClicked" FontSize="32" Margin="10"/>
-        <Button Content="Load Custom" Click="LoadButtonClicked" FontSize="32" Margin="10"/>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Button Content="MN 2022" Click="LoadMNClicked" FontSize="32" Margin="10"/>
+            <Button Content="Load Custom" Click="LoadButtonClicked" FontSize="32" Margin="10"/>
+        </StackPanel>
+        <Button Content="Toggle Fullscreen" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="5" Click="ToggleFullscreen_Clicked"/>
+    </Grid>
+
 </Page>

@@ -10,6 +10,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,6 +38,19 @@ namespace MN_Sciaga
             var lines = QuestionsMocks.QM_MN2022.data.Replace("\r", "").Split('\n');
 
             Frame.Navigate(typeof(ViewerPage), lines);
+        }        
+        
+        public void ToggleFullscreen_Clicked(object sender, RoutedEventArgs e)
+        {
+            var view = ApplicationView.GetForCurrentView();
+            if(view.IsFullScreenMode)
+            {
+                view.ExitFullScreenMode();
+            }
+            else
+            {
+                view.TryEnterFullScreenMode();
+            }
         }
 
         public async void LoadButtonClicked(object sender, RoutedEventArgs e)

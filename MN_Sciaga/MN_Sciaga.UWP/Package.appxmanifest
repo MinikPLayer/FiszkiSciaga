@@ -9,7 +9,7 @@
   <Identity
     Name="2767e4b5-35e4-4660-b491-681f8aa5398a"
     Publisher="CN=Minik"
-    Version="1.0.0.0" />
+    Version="1.0.4.0" />
 
   <mp:PhoneIdentity PhoneProductId="9129de61-af3b-4cd6-92e3-e574695dc91a" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
